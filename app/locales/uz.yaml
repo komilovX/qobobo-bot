@@ -1,0 +1,170 @@
+enter-correct-name : "Iltimos ism sharifingizni tog'ri kiriting:  ism sharif"
+enter-name: "Ismi-sharifingizni kiriting:"
+register-end: "Ro'yxatga olish muvaffaqiyatli yakunlandi"
+greeting: Juda yaxshi! Birgalikda buyurtma beramizmi? 😃
+product: 🛍 Mahsulotlar
+stocks: 🎉 Aksiya
+about-us: 👥 Biz haqimizda
+order-series: 💖 Komplekt buyurtma
+cabinet:  ⚙️ Profil
+my-orders: "📝Mening buyurtmalarim"
+brands: "🔷 Brendlar"
+popular-products: "🔥 Mashxur tovarlar"
+no-order: "Sizda hozircha hech qanday buyurtma yo'q"
+product-caption: "🔷 Katalog: ${category}\n\n🔷 Brend: ${brand}\n\n🔷 Mahsulot: ${product}\n\n ${comment}\n\nNarxi: ${cost} so'm"
+choose-category: Kategoriyani tanlang
+choose-type-product : "Mahsulot turini tanlang"
+choose-product: Mahsulotni tanlang
+choose-brand: Brendni tanlang
+add-to-cart: "🛒 Savatga qo'shish"
+no-data: "Hozirgi vaqtda bu bo'limda malumotlar mavjud emas!"
+our-promo: "Ayni vaqtda bizda quyidagi aksiyalar mavjud: "
+delete-promo: "⛔️ Aksiyani bekor qilish"
+promo: "*Chegirma turi*: 👇"
+promo-amount: "*Chegirma miqdori:* 👇"
+added-to-promo: "Tavarlar aksiyaga o'tqazildi"
+bonus: "*Bonus:*"
+promo-1: "Bonus tavarlar"
+promo-2: "Chegirma qiymatlar"
+promo-3: "Foizli chegirmalar"
+promo-4: "Tavarlar chegirmasi"
+bonus-product: "Bonus tavar 👆:"
+product-name: "*Maxsulot nomi: *"
+bonus-condition: "*Aksiya sharti:*\n"
+percent-promo: "${percent} % li chegirma \nUmumiy narx - ${coast}"
+sum-promo: "${sum} so'm chegirma \nUmumiy narx: ${coast} so'm"
+fixed-promo: "Bo'nus tovarni ${sum} ga sotib oling!"
+condition-or: "_Ushbu mahsulot(lar) dan birini yoki barchasini sotib oling_:"
+condition-and: "_Ushbu ko'rsatilgan  mahsulot(lar)ni barchasini sotib oling:_"
+sum-condition: "Ixtiyoriy maxsulotlarimizdan ${sum} so'mlik xaridni amalga oshiring va bo'nus tavar uchun belgilangan chegirmani qo'lga kiriting"
+in-bonus: "*Aksiyada ishtirok etgan tovar(lar):* 👇\n"
+work-in-progress: Bu bo'lim yaratilish jarayonida
+your-cart-is-empty: Sizning savatingiz bo'sh, buyurtma berish uchun mahsulot tanlang
+# select-city: Shaharni tanlang
+main-menu: Bosh menyu
+choose-dinner: Menyu bilan tanishish uchun «⏬ Ro'yxat » ni bosing yoki taomni tanlang
+price: "*Narxi:* "
+amount: "*Soni*: "
+enter-amount: "Miqdorini *tanlang* yoki *kiriting*:"
+added-to-cart: Savatga qo'shildi\nYana biror narsa xohlaysizmi?
+sum: so'm
+cart-help: "*«❌ Mahsulot nomi»* - savatdan o'chirish \n\n*«🔄 Tozalash»* - savatni butunlay bo'shatish"
+back: ⬅️ Orqaga
+clear: 🔄 Tozalash
+checkout: 🚖 Buyurtma berish
+cart: "🛒 Savat"
+total: Umumiy
+total_with_delivery: Umumiy (yetkazib berish narxi bilan)
+checkout-help: "Buyurtmani *o'zingiz* olib keting yoki *Yetkazib berishni* tanlang"
+delivery: 🚖 Yetkazib berish
+pickup: 🏃 Olib ketish
+menu: ⬅️ Menyu
+date: "*Sana: ${date}*"
+enter-address: "Iltimos Yetkazib berish manzilini quyidagi, \"🗺 Mening Lokatsiyam\" tugmasi orqali jo'nating."
+wrong-address: "Xato lokatsiya. Yana bir bor tekshirib ko'ring."
+my-location: 🗺 Mening Lokatsiyam
+send-number: "📱 <strong>Telefon</strong> raqamingiz qanday? Telefon raqamingizni jo'natish uchun, quyidagi \"📱 Raqamimni jo'natish\" tugmasini bosing."
+settings-send-number: "📱 Raqamni +998 ** *** ** ** shaklida yuboring.\nHozirgi raqamingiz ${phone}"
+send-birthdate: "🎂 ${name}, tavallud kuningiz bilan qachon tabriklashimiz mumkin? Sanani ss.oo.yyyy ko’rinishida kiriting."
+my-number: "📱 Raqamimni jo'natish"
+enter-comment: "Buyurtmani qabul qilishga o'zingiz uchun qulay *vaqtni* va *kommentariyalarni* yozing:"
+asap: Iloji boricha tezroq
+choose-payment-method: "Buyurtmangiz uchun *to’lov turini* tanlang"
+cash: 💵 Naqd pul
+click: 💳 click
+payme: 💳 payme
+payment-type: "*To'lov turi:* ${type}"
+your-order: "<strong>Sizning buyurtmangiz:</strong>"
+phone: Telefon
+address: Manzil
+payment-method: To'lov usuli
+delivery-time-comment: Yetkazib berish vaqti/Kommentariyalar
+delivery-price: <em>Yetkazib berish narxi</em>
+distance_to_branch: Shaxobchagacha bo'lgan masofa
+km: km
+ok: ✅ Tasdiqlash
+confirm: ✅ Tasdiqlash
+buy: ✅ Sotib olish
+cancel: ❌ Bekor Qilish
+invoice_description: "To'lov qiymati: ${fullSum} so'm.\nTo'lovni amalga oshirish uchun \"✅ To'lash\" tugmasini bosing."
+payment_via: ${payment_method} orqali to'lash
+order_on_process: "<strong>#${id}</strong>-sonli buyurtmangiz qabul qilindi.\nHozir Sizga bizning operator qo’ng’roq qiladi."
+order_ready: "Sizning <strong>#${id}</strong> raqamli buyrutmangizni tayorlashni boshladik. Yetkazib berish vaqti ${time} minutdan.\nBizning xizmatlardan foydalanganingiz uchun raxmat! 😊"
+order_pickup: "Sizning <strong>#${id}</strong> raqamli buyrutmangizni tayorlashni boshladik. Tayyor berish vaqti ${time} minutdan.\nBizning xizmatlardan foydalanganingiz uchun raxmat! 😊"
+pay: ✅ To'lash
+settings: ⚙️ Sozlamalar
+select-language: "🇷🇺 Tilni o'zgartirish"
+your-name: "Ismingiz - ${name}\nFamilyangiz - ${last}"
+edit-name: "Ismni o'zgartirish"
+edit-last-name: "Familyani o'zgartirish"
+your-phone: "Sizning hozirgi raqamingiz - *${phone}\nYangi raqamni ham shunday formatda jo'nating"
+select-city: 🏙 Shaharni tanlang
+disable-notifications: 🛎 Ogohlantirishlarni o'chirish
+enable-notifications: 🛎 Ogohlantirishlarni yoqish
+notifications-disabled: Ogohlantirish o'chirilgan
+notifications-enabled: Ogohlantirish yoqilgan
+product-in-stoplist: Bu mahsulot hozirgi vaqtda mavjud emas. Keyinroq urunib ko'ring
+product-cant-order: Bu mahsulotdan ${num} donadan ko'p buyurtma berish mumkin emas.
+product-already-have: Bu mahsulotdan ${num} donadan ko'p buyurtma berish mumkin emas. Savatchada bu mahsulotdan ${cart_num} dona bor.
+order: 🛍 Buyurtma berish
+locations: 🗺 Shaxobchalar
+select-branch: Qaysi shaxobchani tanlaysiz?
+cart-cleared: Savatcha tozalandi
+branch-selected: Tanlangan shaxobcha
+iiko-card-instruction: Rootsda o'zingiz uchun hamyon ochish uchun quyidagi ko'rsatmalarga amal qiling
+skip: 👎🏻 O'tkazish
+iiko-card-registered: "Tabriklaymiz, siz Roots ning virtual hamyoniga ega bo'lish uchun  ro'yxatdan muvaffaqiyatli o'tdingiz. 😊"
+cashback: 💸 Jamg'arma
+already-registered-in-cashback: Siz kritgan raqam avval ro'yxatdan o'tgan. Iltimos boshqa nomerini kiriting
+card-number: Karta raqami
+balance: Hisobingiz
+show-barcode: 🆔 Shtrix-kod
+breakfast: "<strong>Afsuski</strong>, bizning mazali va to`yimli nonushtalarimiz dushanbadan shanbaga qadar soat 11-00 gacha tayyorlanadi.\nUmid qilamizki, siz ularni ertaga albatta ta`tib ko`rasiz. <strong>Roots</strong>ni tanlaganingiz uchun tashakkur! A`lo kayfiyat hamisha hamrohingiz bo`lsin!"
+#iiko-card-instruction: "Roots muhlislarining inoq oilasiga xush kelibsiz!\nEndi esa sizga sodda va ko’p vaqt olmaydigan ro’yhatdan o’tish jarayonini taklif etamiz."
+cashback-instruction: "«Cash Back» olish uchun oddiy ro’yxatdan o’ting"
+in-which-city: Siz qaysi shaharda istiqomat qilasiz?
+thanks-friend: Rahmat! Do’st bo’lamiz, ${name}!
+pay-in-cash: <em>(to’lov naqd ko’rinishida qabul qilinadi)</em>
+delivery-price-doesnt-count: "<em>*Yetkazib berish buyurtma summasiga kirmaydi.</em>"
+lets-continue: Mahsulot savatga qo'shildi 😃
+what-size: Kategoriyani tanlang
+terminal: 💳 Terminal
+list: "⏬ To’liq ro’yxat"
+list-unavaliable: "Ro’yxat vaqtinchalik mavjud emas"
+category: "Bo'lim"
+branch-timetable: >
+  *Afsuski* 😔hozirgi vaqtda biz sizni buyurtmangizni qabul qilolmaymiz.\n
+  Yetkazish xizmati bugun ${ from } dan ${ until } gacha xizmat ko'rsatadi.\n
+  *Roots* ni tanlaganingiz uchun raxmat!\n
+  Sizga yaxshi kayfiyat tilab qolamiz!
+cart-isnt-empty: "Savat bo'sh emas. Agar siz boshqa shaharga ketsangiz, xaridlaringiz savatchasi tozalanadi.\nYana bir shaharga borishni xohlaysizmi?"
+number-already-registered: Xatolik yuz berdi. Bu telefon raqami avval ro'yxatdan o'tgan bo'lishi mumkin
+order-type: Buyurtma turi
+birthdate-error: "Tavallud kuningiz 01.01.1900 dan oldin va bugunki kundan keyin bo'lmasligi kerak"
+iikocard-not-registered-yet: "Sizning shaxsiy xamyoningiz hali ro'yxatdan o'tmagan. Iltimos Keyinroq urinib kuring"
+payme-click-wip: Afsuski, vaqtinchalik ${ method }dan to'lov olaolmaymiz.
+order_created_pay: Sizning buyrutmangiz qabul qilindi. Iltimos to'lovni amalga oshiring!
+leave-feedback: ✍️ Fikr bildirish
+feedback-rate: "Roots ni tanlaganingiz uchun raxmat.\nAgar Siz bizning xizmatlarimiz sifatini yaxhshilashga yordam bersangiz benihoya xursand bulamiz.\nBuning uchun 5 ballik tizim asosida baholang"
+feedback-text: "Qaysi xizmat turumiz sizga *yoqmadi*?"
+feedback-ok: Qo’shimcha fikr va mulohaza yo’q.
+leave-feedback-text: O’z fikr va mulohazalaringizni yozma yoki audio xabar shaklida qoldiring.
+feedback-thanks: Fikr va mulohazalaringiz uchun raxmat!
+change-name: FIO ni o'zgartirish
+change-contact-phone: Raqamni o'zgartirish
+feedback-5: Hammasi yoqdi ♥️
+feedback-4: Yaxshi ⭐️⭐️⭐️⭐️
+feedback-3: Yoqmadi ⭐️⭐️⭐️
+feedback-2: Yomon ⭐️⭐️
+feedback-1: Juda yomon 👎🏻
+call-me: "Qaytib qo’ng’iroq qiling!"
+will-call-you: "Sizning buyurtmangiz qabul qilindi 😊,\n*Buyurtma raqamingiz: ${id}*\n\nOperatorlarimiz siz bilan tez orada bog'lanashadi."
+service: Servis
+courier: Kuryer
+find_nearest_branch: Eng yaqin shaxobchamizni aniqlash
+nearest_branch: "Eng yaqin shaxobcha - *${ branch }*"
+enter-new-name: Ismingizni yuboring
+enter-new-last-name: Familyangizni yuboring
+delivery-cost: "_Yetkazib berish narxi_: ${cost} so'm"
+delivery_price_info: <em>Yetqazib berish xizmati 3 kmgacha 6000 so'm va 3 kmdan oshgan holda har 1 km uchun 1000 so'mdan hisoblanadi!!!</em>
+total-check: "Sizning buyurtmangiz:\n\nTelefon: ${phone}\nManzil: ${address}\nTo'lov usuli: ${order_type}"
