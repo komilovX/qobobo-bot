@@ -11,7 +11,7 @@ my-orders: "📝Mening buyurtmalarim"
 brands: "🔷 Brendlar"
 popular-products: "🔥 Mashxur tovarlar"
 no-order: "Sizda hozircha hech qanday buyurtma yo'q"
-product-caption: "🔷 Katalog: ${category}\n\n🔷 Brend: ${brand}\n\n🔷 Mahsulot: ${product}\n\n ${comment}\n\nNarxi: ${cost} so'm"
+product-caption: "🔷 Mahsulot: ${product}\n\n ${comment}\n\nNarxi: ${cost} so'm"
 choose-category: Kategoriyani tanlang
 choose-type-product : "Mahsulot turini tanlang"
 choose-product: Mahsulotni tanlang
