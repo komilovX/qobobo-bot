@@ -14,7 +14,7 @@ const Remainder = require("./models/remainder.model");
 const redisSession = new Session({
   host: env.DB_HOST,
   user: env.DB_USER,
-  password: "",
+  password: env.DB_PASSWORD,
   database: env.DB_NAME,
 });
 
@@ -59,6 +59,23 @@ async function checkLimit(id, num, ctx) {
   } else {
     return { message: ctx.i18n.t("product-in-stoplist"), value: false };
   }
+}
+function BasicCommandHandler(handler) {
+  if (!handler) {
+    handler = new Composer();
+  }
+
+  handler
+    .hears(match("product"), (ctx) => {
+      global.routes.product(ctx);
+    })
+    .hears(match("cabinet"), (ctx) => {
+      global.routes.profil(ctx);
+    })
+    .hears(match("my-orders"), (ctx) => {
+      global.routes.myOrders(ctx);
+    });
+  return handler;
 }
 
 function BasicStepHandler(handler) {
@@ -200,11 +217,11 @@ function ArrayConcat(arr, ctx, type) {
     const category = arr.map((x) =>
       btn(lang === "uz" ? x.name : x.name_ru, x.id)
     );
-    return [...head, ...category, btn(loc.t("back"), loc.t("back"))];
+    return [...head, ...category];
   } else if (type == "brand") {
     const arrows = [btn("⬅️", "⬅️"), btn("➡️", "➡️")];
     let catalog = _.chunk(category, 2);
-    return [head, ...catalog, arrows, [btn(loc.t("back"), loc.t("back"))]];
+    return [head, ...catalog, arrows];
   }
   return [...category, btn(loc.t("back"), loc.t("back"))];
 }
@@ -284,6 +301,7 @@ function showTotalCheque(ctx) {
 
 module.exports = {
   BasicStepHandler,
+  BasicCommandHandler,
   redisSession,
   registerUser,
   getCategories,

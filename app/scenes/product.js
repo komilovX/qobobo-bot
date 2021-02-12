@@ -30,9 +30,8 @@ module.exports = new WizardScene(
         .then((v) => ctx.session.message_id == v.message_id);
       ctx.wizard.next();
     } else {
-      await ctx.answerCbQuery();
       ctx
-        .editMessageText(
+        .reply(
           status ? status : ctx.i18n.t("choose-category"),
           Markup.inlineKeyboard(ArrayConcat(parents, ctx, "category"), {
             columns: 2,

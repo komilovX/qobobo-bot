@@ -99,16 +99,14 @@ module.exports = new WizardScene(
           ctx.session.address = street.formattedAddress;
         }
       });
-      const btn = Markup.callbackButton;
       const l = ctx.i18n;
-      if (!ctx.session.time) await ctx.deleteMessage(ctx.session.message_id);
       ctx
         .replyWithMarkdown(
           ctx.i18n.t("choose-payment-method"),
-          Markup.inlineKeyboard([
-            [btn(l.t("cash"), l.t("cash"))],
-            [btn(l.t("payme"), l.t("payme")), btn(l.t("click"), l.t("click"))],
-            [btn(l.t("back"), l.t("back")), btn(l.t("menu"), l.t("menu"))],
+          Markup.keyboard([
+            [l.t("cash")],
+            [l.t("payme"), l.t("click")],
+            [l.t("back"), l.t("menu")],
           ])
             .resize()
             .extra()
@@ -117,98 +115,78 @@ module.exports = new WizardScene(
       ctx.wizard.next();
     }),
   BasicComandHandler()
-    .action(match("back"), async (ctx) => {
-      if (!ctx.session.time) {
-        await ctx.deleteMessage(ctx.session.message_id);
-      }
-      await ctx.answerCbQuery();
+    .hears(match("back"), async (ctx) => {
       ctx
-        .reply(
+        .replyWithMarkdown(
           ctx.i18n.t("enter-address"),
           Markup.keyboard([
             [Markup.locationRequestButton(ctx.i18n.t("my-location"))],
             [ctx.i18n.t("menu")],
           ])
-            .oneTime()
             .resize()
             .extra()
         )
         .then((val) => (ctx.session.message_id = val.message_id));
       ctx.wizard.back();
     })
-    .action(match("menu"), async (ctx) => {
+    .hears(match("menu"), async (ctx) => {
       await ctx.scene.leave();
-      return ctx.scene.enter("product");
+      global.routes.start(ctx);
     })
-    .action(match("cash"), async (ctx) => {
+    .hears(match("cash"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("cash");
       const check = showTotalCheque(ctx);
-      const btn = Markup.callbackButton;
       const l = ctx.i18n;
       ctx
-        .editMessageText(
+        .replyWithMarkdown(
           check,
-          Extra.markdown().markup(
-            Markup.inlineKeyboard([
-              [btn(l.t("confirm"), l.t("confirm"))],
-              [btn(l.t("cancel"), l.t("cancel"))],
-            ])
-          )
+          Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
+            .resize()
+            .extra()
         )
         .then((val) => (ctx.session.message_id = val.message_id));
-      await ctx.answerCbQuery();
       ctx.wizard.next();
     })
-    .action(match("click"), async (ctx) => {
+    .hears(match("click"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("click");
       const check = await showTotalCheque(ctx);
-      const btn = Markup.callbackButton;
       const l = ctx.i18n;
       ctx
-        .editMessageText(
+        .replyWithMarkdown(
           check,
-          Extra.markdown().markup(
-            Markup.inlineKeyboard([
-              [btn(l.t("confirm"), l.t("confirm"))],
-              [btn(l.t("cancel"), l.t("cancel"))],
-            ])
-          )
+          Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
+            .resize()
+            .extra()
         )
         .then((val) => (ctx.session.message_id = val.message_id));
-      await ctx.answerCbQuery();
       ctx.wizard.next();
     })
-    .action(match("payme"), async (ctx) => {
+    .hears(match("payme"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("payme");
       const check = await showTotalCheque(ctx);
-      const btn = Markup.callbackButton;
       const l = ctx.i18n;
       ctx
-        .editMessageText(
+        .replyWithMarkdown(
           check,
           Extra.markdown().markup(
-            Markup.inlineKeyboard([
-              [btn(l.t("confirm"), l.t("confirm"))],
-              [btn(l.t("cancel"), l.t("cancel"))],
-            ])
+            Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
+              .resize()
+              .extra()
           )
         )
         .then((val) => (ctx.session.message_id = val.message_id));
-      await ctx.answerCbQuery();
       ctx.wizard.next();
     }),
   BasicComandHandler()
-    .action(match("back"), async (ctx) => {
-      await ctx.deleteMessage();
-      const btn = Markup.callbackButton;
+    .hears(match("back"), async (ctx) => {
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
           ctx.i18n.t("choose-payment-method"),
-          Markup.inlineKeyboard([
-            [btn(l.t("cash"), l.t("cash"))],
-            [btn(l.t("payme"), l.t("payme")), btn(l.t("click"), l.t("click"))],
-            [btn(l.t("back"), l.t("back")), btn(l.t("menu"), l.t("menu"))],
+          Markup.keyboard([
+            [l.t("cash")],
+            [l.t("payme"), l.t("click")],
+            [l.t("back"), l.t("menu")],
           ])
             .resize()
             .extra()
@@ -216,28 +194,25 @@ module.exports = new WizardScene(
         .then((val) => (ctx.session.message_id = val.message_id));
       ctx.wizard.back();
     })
-    .action(match("cancel"), async (ctx) => {
-      const btn = Markup.callbackButton;
+    .hears(match("cancel"), async (ctx) => {
       const l = ctx.i18n;
       await ctx
-        .editMessageText(
+        .replyWithMarkdown(
           ctx.i18n.t("choose-payment-method"),
           Extra.markdown().markup(
-            Markup.inlineKeyboard([
-              [btn(l.t("cash"), l.t("cash"))],
-              [
-                btn(l.t("payme"), l.t("payme")),
-                btn(l.t("click"), l.t("click")),
-              ],
-              [btn(l.t("back"), l.t("back")), btn(l.t("menu"), l.t("menu"))],
+            Markup.keyboard([
+              [l.t("cash")],
+              [l.t("payme"), l.t("click")],
+              [l.t("back"), l.t("menu")],
             ])
+              .resize()
+              .extra()
           )
         )
         .then((val) => (ctx.session.message_id = val.message_id));
-      await ctx.answerCbQuery();
       ctx.wizard.back();
     })
-    .action(match("confirm"), async (ctx) => {
+    .hears(match("confirm"), async (ctx) => {
       try {
         let order = await createIncomingOrder(ctx);
         await ctx.deleteMessage(ctx.session.message_id);
