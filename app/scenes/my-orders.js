@@ -12,14 +12,16 @@ function buildKeyboard(arr, ctx, ctr) {
   const products = JSON.parse(arr[ctr].products)
     .map(
       (p) =>
-        `${loc.t("product-name")} ${p.name}\n${loc.t("price")} ${
+        `${loc.t("product-name")} ${p.name}\n${loc.t("price")}: ${
           p.price
-        } ${loc.t("sum")}\n${loc.t("amount")} ${p.amount}\n\n`
+        } ${loc.t("sum")}\n${loc.t("amount")}: ${p.amount}\n\n`
     )
     .join("");
   const description = `${products}${loc.t("payment-type", {
     type: obj.payment_type == "card" ? "💳" : "💵",
-  })}\n${loc.t("date", { date: new Date().toLocaleDateString("ru-RU") })}`;
+  })}\n${loc.t("date", {
+    date: new Date().toLocaleDateString("ru-RU"),
+  })}\n${loc.t("status", { status: loc.t(obj.status) })}`;
   const markup = [
     [
       inln("⬅️", "⬅️"),
