@@ -35,6 +35,10 @@ async function createIncomingOrder(ctx) {
     });
     ctx.session.cart = [];
     ctx.session.in_cart = 0;
+    axios.post(`${env.url}/api/orders/new_order`, {
+      key: "new_order",
+      orderId: order.id,
+    });
     return order;
   } catch (error) {
     throw error;
@@ -135,7 +139,7 @@ module.exports = new WizardScene(
     })
     .hears(match("cash"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("cash");
-      const check = showTotalCheque(ctx);
+      const check = await showTotalCheque(ctx);
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
@@ -150,6 +154,7 @@ module.exports = new WizardScene(
     .hears(match("click"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("click");
       const check = await showTotalCheque(ctx);
+      console.log("check :>> ", check);
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
@@ -168,11 +173,9 @@ module.exports = new WizardScene(
       ctx
         .replyWithMarkdown(
           check,
-          Extra.markdown().markup(
-            Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
-              .resize()
-              .extra()
-          )
+          Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
+            .resize()
+            .extra()
         )
         .then((val) => (ctx.session.message_id = val.message_id));
       ctx.wizard.next();
@@ -199,15 +202,13 @@ module.exports = new WizardScene(
       await ctx
         .replyWithMarkdown(
           ctx.i18n.t("choose-payment-method"),
-          Extra.markdown().markup(
-            Markup.keyboard([
-              [l.t("cash")],
-              [l.t("payme"), l.t("click")],
-              [l.t("back"), l.t("menu")],
-            ])
-              .resize()
-              .extra()
-          )
+          Markup.keyboard([
+            [l.t("cash")],
+            [l.t("payme"), l.t("click")],
+            [l.t("back"), l.t("menu")],
+          ])
+            .resize()
+            .extra()
         )
         .then((val) => (ctx.session.message_id = val.message_id));
       ctx.wizard.back();

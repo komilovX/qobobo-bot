@@ -10,6 +10,7 @@ const Users = require("./models/user.model");
 const Category = require("./models/category.model");
 const Products = require("./models/product.model");
 const Remainder = require("./models/remainder.model");
+const Delivery = require("./models/delivery.model");
 
 const redisSession = new Session({
   host: env.DB_HOST,
@@ -40,6 +41,19 @@ function calculateDelivery(distance) {
   }
 }
 
+async function calculateDeliveryByLimit(total) {
+  try {
+    let price = 0;
+    const delivery = await Delivery.findByPk(1);
+    if (delivery.limit > total) {
+      price = delivery.price;
+    }
+    return price;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function checkLimit(id, num, ctx) {
   const product = await Remainder.findOne({
     where: { product_id: id },
@@ -60,6 +74,7 @@ async function checkLimit(id, num, ctx) {
     return { message: ctx.i18n.t("product-in-stoplist"), value: false };
   }
 }
+
 function BasicCommandHandler(handler) {
   if (!handler) {
     handler = new Composer();
@@ -91,6 +106,15 @@ function BasicStepHandler(handler) {
       } catch (e) {
         console.log(e);
       }
+    })
+    .hears(match("product"), (ctx) => {
+      global.routes.product(ctx);
+    })
+    .hears(match("cabinet"), (ctx) => {
+      global.routes.profil(ctx);
+    })
+    .hears(match("my-orders"), (ctx) => {
+      global.routes.myOrders(ctx);
     })
     .action(match("checkout"), async (ctx) => {
       if (ctx.session.cart.length === 0) {
@@ -177,6 +201,7 @@ async function getCategoriesByBrandId(id) {
   );
   return category;
 }
+
 async function getProductsByBrandAndCategory(brand_id, category_id) {
   let products = await Products.findAll({
     where: { brand_id, category_id },
@@ -267,7 +292,7 @@ function showCheque(cart, ctx) {
   )}*: ${total.format(0, 3, " ")} ${loc == "uz" ? "so'm" : "сум"}`;
 }
 
-function showTotalCheque(ctx) {
+async function showTotalCheque(ctx) {
   const loc = ctx.i18n.locale();
   const sums = [];
   const items = ctx.session.cart.map((p) => {
@@ -279,9 +304,11 @@ function showTotalCheque(ctx) {
       " "
     )} = ${total.format(0, 3, " ")} ${loc == "uz" ? "so'm" : "сум"}\n\n`;
   });
-  let delivery = calculateDelivery(ctx.session.distance);
+  let productSum = sums.reduce((acc, cur) => acc + cur);
+  let delivery = await calculateDeliveryByLimit(productSum);
+  console.log(delivery);
   ctx.session.delivery = delivery;
-  const total = sums.reduce((acc, cur) => acc + cur) + delivery;
+  const total = productSum + delivery;
 
   const joinItems = items.join("");
   let deliveryText = ctx.i18n.t("delivery-cost", {
@@ -297,6 +324,11 @@ function showTotalCheque(ctx) {
     3,
     " "
   )} ${loc == "uz" ? "so'm" : "сум"}`;
+}
+
+function imageWrapper(image) {
+  return env.no_image;
+  return `${env.url}/uploads/${image}`;
 }
 
 module.exports = {
@@ -315,4 +347,5 @@ module.exports = {
   showCheque,
   inlineKeyboard,
   showTotalCheque,
+  imageWrapper,
 };

@@ -9,6 +9,7 @@ const {
   checkLimit,
   ArrayConcat,
   inlineKeyboard,
+  imageWrapper,
 } = require("../methods");
 
 module.exports = new WizardScene(
@@ -65,7 +66,7 @@ module.exports = new WizardScene(
             ctx.session.nth = 0;
             const product = products[0];
             ctx
-              .replyWithPhoto(product.photo, {
+              .replyWithPhoto(imageWrapper(product.photo), {
                 caption: productCaption(ctx, product),
                 reply_markup: Markup.inlineKeyboard(
                   inlineKeyboard(ctx, 0, products.length, 1)
@@ -118,7 +119,7 @@ module.exports = new WizardScene(
           ctx.session.nth = 0;
           const product = products[0];
           ctx
-            .replyWithPhoto(product.photo, {
+            .replyWithPhoto(imageWrapper(product.photo), {
               caption: productCaption(ctx, product),
               reply_markup: Markup.inlineKeyboard(
                 inlineKeyboard(ctx, 0, products.length, 1)
