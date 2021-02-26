@@ -175,7 +175,7 @@ module.exports = new WizardScene(
         let { products, nth, counter } = ctx.session;
         await ctx.editMessageMedia(
           {
-            media: products[nth].photo,
+            media: imageWrapper(products[nth].photo),
             type: "photo",
             caption: productCaption(ctx, products[nth]),
           },
@@ -197,7 +197,7 @@ module.exports = new WizardScene(
         let { products, nth, counter } = ctx.session;
         await ctx.editMessageMedia(
           {
-            media: products[nth].photo,
+            media: imageWrapper(products[nth].photo),
             type: "photo",
             parse_mode: "Markdown",
             caption: productCaption(ctx, products[nth]),

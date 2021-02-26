@@ -256,11 +256,6 @@ function inlineKeyboard(ctx, nth, length, counter) {
   const loc = ctx.i18n;
   let cart = ctx.session.in_cart;
   return [
-    [
-      btn("⬅️", "⬅️"),
-      btn(`${nth + 1}-${length}`, `${nth}-${length}`),
-      btn("➡️", "➡️"),
-    ],
     [btn("-", "-"), btn(`${counter}`, `${counter}`), btn("+", "+")],
     [btn(loc.t("add-to-cart"), loc.t("add-to-cart"))],
     [
