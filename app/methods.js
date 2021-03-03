@@ -11,6 +11,7 @@ const Category = require("./models/category.model");
 const Products = require("./models/product.model");
 const Remainder = require("./models/remainder.model");
 const Delivery = require("./models/delivery.model");
+const DeliveryTime = require("./models/delivery_time.model");
 
 const redisSession = new Session({
   host: env.DB_HOST,
@@ -264,6 +265,14 @@ function inlineKeyboard(ctx, nth, length, counter) {
     ],
   ];
 }
+async function getDeliveryTimes() {
+  try {
+    const times = await DeliveryTime.findAll({ raw: true });
+    return times.map((time) => time.time);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function showCheque(cart, ctx) {
   const loc = ctx.i18n.locale();
@@ -301,7 +310,6 @@ async function showTotalCheque(ctx) {
   });
   let productSum = sums.reduce((acc, cur) => acc + cur);
   let delivery = await calculateDeliveryByLimit(productSum);
-  console.log(delivery);
   ctx.session.delivery = delivery;
   const total = productSum + delivery;
 
@@ -309,11 +317,12 @@ async function showTotalCheque(ctx) {
   let deliveryText = ctx.i18n.t("delivery-cost", {
     cost: `${Number(delivery).format(0, 3, " ")}`,
   });
-  const { phone, address, order_type } = ctx.session;
+  const { phone, address, order_type, delivery_time } = ctx.session;
   return `${ctx.i18n.t("total-check", {
     phone,
     address,
     order_type,
+    delivery_time,
   })}\n\n${joinItems}${deliveryText}\n\n${ctx.i18n.t("total")}: ${total.format(
     0,
     3,
@@ -336,6 +345,7 @@ module.exports = {
   getBrands,
   getProductsByBrandAndCategory,
   getCategoriesByBrandId,
+  getDeliveryTimes,
   checkLimit,
   productCaption,
   ArrayConcat,

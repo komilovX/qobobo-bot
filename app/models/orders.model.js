@@ -24,6 +24,9 @@ const Orders = sequelize.define("orders", {
   delivery: {
     type: Sequelize.FLOAT,
   },
+  delivery_time: {
+    type: Sequelize.STRING,
+  },
   total: {
     type: Sequelize.FLOAT,
     defaultValue: 0,

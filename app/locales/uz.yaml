@@ -56,6 +56,7 @@ added-to-cart: Savatga qo'shildi\nYana biror narsa xohlaysizmi?
 sum: so'm
 cart-help: "*«❌ Mahsulot nomi»* - savatdan o'chirish \n\n*«🔄 Tozalash»* - savatni butunlay bo'shatish"
 back: ⬅️ Orqaga
+next: Oldinga ➡️
 clear: 🔄 Tozalash
 checkout: 🚖 Buyurtma berish
 cart: "🛒 Savat"
@@ -63,6 +64,7 @@ total: Umumiy
 total_with_delivery: Umumiy (yetkazib berish narxi bilan)
 checkout-help: "Buyurtmani *o'zingiz* olib keting yoki *Yetkazib berishni* tanlang"
 delivery: 🚖 Yetkazib berish
+delivery-time: Yetkazib berish vaqtini tanlang
 pickup: 🏃 Olib ketish
 menu: ⬅️ Menyu
 date: "*Sana: ${date}*"
@@ -84,7 +86,7 @@ your-order: "<strong>Sizning buyurtmangiz:</strong>"
 phone: Telefon
 address: Manzil
 payment-method: To'lov usuli
-delivery-time-comment: Yetkazib berish vaqti/Kommentariyalar
+delivery-time-comment: Yetkazib berish vaqti
 delivery-price: <em>Yetkazib berish narxi</em>
 distance_to_branch: Shaxobchagacha bo'lgan masofa
 km: km
@@ -173,4 +175,4 @@ enter-new-name: Ismingizni yuboring
 enter-new-last-name: Familyangizni yuboring
 delivery-cost: "_Yetkazib berish narxi_: ${cost} so'm"
 delivery_price_info: <em>Yetqazib berish xizmati 3 kmgacha 6000 so'm va 3 kmdan oshgan holda har 1 km uchun 1000 so'mdan hisoblanadi!!!</em>
-total-check: "Sizning buyurtmangiz:\n\nTelefon: ${phone}\nManzil: ${address}\nTo'lov usuli: ${order_type}"
+total-check: "Sizning buyurtmangiz:\n\nTelefon: ${phone}\nManzil: ${address}\nTo'lov usuli: ${order_type}\nYetkazib berish vaqti: ${delivery_time}"
