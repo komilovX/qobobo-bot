@@ -22,14 +22,7 @@ function geoCoder() {
 const ADMIN_USERNAME = 667502038;
 async function createIncomingOrder(ctx) {
   try {
-    const {
-      first_name,
-      phone,
-      address,
-      order_type,
-      delivery,
-      delivery_time,
-    } = ctx.session;
+    const { first_name, phone, address, order_type, delivery } = ctx.session;
     const order = await Orders.create({
       chat_id: ctx.chat.id,
       clientName: first_name,
@@ -38,7 +31,6 @@ async function createIncomingOrder(ctx) {
       products: JSON.stringify(ctx.session.cart),
       delivery,
       orderType: order_type,
-      delivery_time,
       system: "Telegram",
       date: new Date().toUTCString(),
     });
@@ -153,15 +145,12 @@ module.exports = new WizardScene(
     })
     .hears(match("cash"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("cash");
-      const times = await getDeliveryTimes();
-      ctx.scene.state.delivery_times = times;
+      const check = await showTotalCheque(ctx);
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
-          l.t("delivery-time"),
-          Markup.keyboard(times.concat([l.t("back"), l.t("next")]), {
-            columns: 2,
-          })
+          check,
+          Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
             .resize()
             .extra()
         )
@@ -170,15 +159,13 @@ module.exports = new WizardScene(
     })
     .hears(match("click"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("click");
-      const times = await getDeliveryTimes();
-      ctx.scene.state.delivery_times = times;
+      const check = await showTotalCheque(ctx);
+      console.log("check :>> ", check);
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
-          l.t("delivery-time"),
-          Markup.keyboard(times.concat([l.t("back"), l.t("next")]), {
-            columns: 2,
-          })
+          check,
+          Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
             .resize()
             .extra()
         )
@@ -187,15 +174,12 @@ module.exports = new WizardScene(
     })
     .hears(match("payme"), async (ctx) => {
       ctx.session.order_type = ctx.i18n.t("payme");
-      const times = await getDeliveryTimes();
-      ctx.scene.state.delivery_times = times;
+      const check = await showTotalCheque(ctx);
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
-          l.t("delivery-time"),
-          Markup.keyboard(times.concat([l.t("back"), l.t("next")]), {
-            columns: 2,
-          })
+          check,
+          Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
             .resize()
             .extra()
         )
@@ -219,73 +203,16 @@ module.exports = new WizardScene(
         .then((val) => (ctx.session.message_id = val.message_id));
       ctx.wizard.back();
     })
-    .hears(match("next"), async (ctx) => {
-      ctx.session.delivery_time = "";
-      const check = await showTotalCheque(ctx);
-      const l = ctx.i18n;
-      ctx
-        .replyWithMarkdown(
-          check,
-          Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
-            .resize()
-            .extra()
-        )
-        .then((val) => (ctx.session.message_id = val.message_id));
-      ctx.wizard.next();
-    })
-    .on("text", async (ctx) => {
-      const { delivery_times = [] } = ctx.scene.state;
-      if (delivery_times.includes(ctx.message.text)) {
-        ctx.session.delivery_time = ctx.message.text;
-        const check = await showTotalCheque(ctx);
-        const l = ctx.i18n;
-        ctx
-          .replyWithMarkdown(
-            check,
-            Markup.keyboard([[l.t("confirm")], [l.t("cancel")]])
-              .resize()
-              .extra()
-          )
-          .then((val) => (ctx.session.message_id = val.message_id));
-        ctx.wizard.next();
-      } else {
-        ctx
-          .replyWithMarkdown(
-            l.t("delivery-time"),
-            Markup.keyboard(delivery_times.concat([l.t("back"), l.t("next")]), {
-              columns: 2,
-            })
-              .resize()
-              .extra()
-          )
-          .then((val) => (ctx.session.message_id = val.message_id));
-      }
-    }),
-  BasicComandHandler()
-    .hears(match("back"), async (ctx) => {
-      const times = await getDeliveryTimes();
-      const l = ctx.i18n;
-      ctx
-        .replyWithMarkdown(
-          l.t("delivery-time"),
-          Markup.keyboard(times.concat([l.t("back"), l.t("next")]), {
-            columns: 2,
-          })
-            .resize()
-            .extra()
-        )
-        .then((val) => (ctx.session.message_id = val.message_id));
-      ctx.wizard.back();
-    })
     .hears(match("cancel"), async (ctx) => {
-      const times = await getDeliveryTimes();
       const l = ctx.i18n;
-      ctx
+      await ctx
         .replyWithMarkdown(
-          l.t("delivery-time"),
-          Markup.keyboard(times.concat([l.t("back"), l.t("next")]), {
-            columns: 2,
-          })
+          ctx.i18n.t("choose-payment-method"),
+          Markup.keyboard([
+            [l.t("cash")],
+            [l.t("payme"), l.t("click")],
+            [l.t("back"), l.t("menu")],
+          ])
             .resize()
             .extra()
         )
@@ -301,7 +228,6 @@ module.exports = new WizardScene(
         );
         ctx.session.cart = [];
         ctx.session.in_cart = 0;
-        ctx.session.delivery_time = null;
         (ctx.session.delivery = null),
           (ctx.session.address = null),
           (ctx.session.distance = null);
