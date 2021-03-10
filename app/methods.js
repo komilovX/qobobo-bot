@@ -114,6 +114,9 @@ function BasicStepHandler(handler) {
     .hears(match("cabinet"), (ctx) => {
       global.routes.profil(ctx);
     })
+    .hears(match("cart"), (ctx) => {
+      global.routes.cart(ctx);
+    })
     .hears(match("my-orders"), (ctx) => {
       global.routes.myOrders(ctx);
     })

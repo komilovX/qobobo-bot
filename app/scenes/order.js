@@ -44,10 +44,12 @@ async function createIncomingOrder(ctx) {
     });
     ctx.session.cart = [];
     ctx.session.in_cart = 0;
-    axios.post(`${env.url}/api/orders/new_order`, {
-      key: "new_order",
-      orderId: order.id,
-    });
+    axios
+      .post(`${env.url}/api/orders/new_order`, {
+        key: "new_order",
+        orderId: order.id,
+      })
+      .catch(() => {});
     ctx.telegram
       .sendMessage(ADMIN_USERNAME, `Новый заказ #${order.id}`)
       .catch(() => {});

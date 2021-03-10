@@ -53,6 +53,7 @@ bot.hears(match("product"), global.routes.product);
 bot.hears(match("my-orders"), global.routes.myOrders);
 bot.hears(match("cabinet"), global.routes.profil);
 bot.hears(match("about-us"), global.routes.aboutUs);
+bot.hears(match("cart"), global.routes.cart);
 
 bot.on("text", async (ctx) => {
   await ctx.deleteMessage();

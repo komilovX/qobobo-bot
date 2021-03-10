@@ -19,6 +19,7 @@ global.routes = {
         Markup.keyboard([
           [btn(loc.t("product"))],
           [btn(loc.t("my-orders"))],
+          [btn(loc.t("cart"))],
           [btn(loc.t("cabinet"))],
         ])
           .resize()
@@ -30,6 +31,7 @@ global.routes = {
       Markup.keyboard([
         [btn(loc.t("product"))],
         [btn(loc.t("my-orders"))],
+        [btn(loc.t("cart"))],
         [btn(loc.t("cabinet"))],
       ])
         .resize()
@@ -54,6 +56,12 @@ global.routes = {
   product: enter("product"),
   profil: enter("profil"),
   aboutUs: enter("about-us"),
-  cart: enter("cart"),
+  cart: (ctx) => {
+    if (ctx.session.cart.length === 0) {
+      ctx.reply(ctx.i18n.t("your-cart-is-empty"));
+    } else {
+      ctx.scene.enter("cart");
+    }
+  },
   order: enter("order"),
 };

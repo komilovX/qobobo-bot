@@ -3,7 +3,7 @@ const WizardScene = require("telegraf/scenes/wizard");
 const Composer = require("telegraf/composer");
 const Extra = require("telegraf/extra");
 const { match } = require("telegraf-i18n");
-const { BasicCommandHandler } = require("../methods");
+const { BasicStepHandler } = require("../methods");
 
 function buildKeyboard(arr, ctx, ctr) {
   const inln = Markup.callbackButton;
@@ -49,15 +49,7 @@ module.exports = new WizardScene(
       .then((v) => (ctx.session.message_id = v.message_id));
     ctx.wizard.next();
   },
-  BasicCommandHandler()
-    .command("start", async (ctx) => {
-      ctx.session.my_orders = null;
-      await ctx.scene.leave();
-      await global.routes.start(ctx, true);
-      if (!ctx.session.time) {
-        await ctx.deleteMessage(ctx.session.message_id);
-      }
-    })
+  BasicStepHandler()
     .action(match("back"), async (ctx) => {
       ctx.session.my_orders = null;
       await ctx.answerCbQuery();
