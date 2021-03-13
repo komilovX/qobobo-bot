@@ -38,5 +38,7 @@ const Orders = sequelize.define("orders", {
     type: Sequelize.STRING,
     defaultValue: "new",
   },
+  latitude: Sequelize.FLOAT,
+  longitude: Sequelize.FLOAT,
 });
 module.exports = Orders;

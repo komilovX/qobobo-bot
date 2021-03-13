@@ -22,7 +22,15 @@ function geoCoder() {
 const ADMIN_USERNAME = 667502038;
 async function createIncomingOrder(ctx) {
   try {
-    const { first_name, phone, address, order_type, delivery } = ctx.session;
+    const {
+      first_name,
+      phone,
+      address,
+      order_type,
+      delivery,
+      latitude,
+      longitude,
+    } = ctx.session;
     const order = await Orders.create({
       chat_id: ctx.chat.id,
       clientName: first_name,
@@ -33,6 +41,8 @@ async function createIncomingOrder(ctx) {
       orderType: order_type,
       system: "Telegram",
       date: new Date().toUTCString(),
+      latitude,
+      longitude,
     });
     ctx.session.cart = [];
     ctx.session.in_cart = 0;
@@ -99,6 +109,8 @@ module.exports = new WizardScene(
         { latitude: 41.317104, longitude: 69.283132 }
       );
       ctx.session.distance = distance;
+      ctx.session.latitude = latitude;
+      ctx.session.longitude = longitude;
       geoCoder().reverse({ lat: latitude, lon: longitude }, (err, res) => {
         if (err) throw err;
         const location = res.find((l) => !!l.streetName && !!l.streetNumber);
