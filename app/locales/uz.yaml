@@ -68,7 +68,7 @@ delivery-time: Yetkazib berish vaqtini tanlang
 pickup: 🏃 Olib ketish
 menu: ⬅️ Menyu
 date: "*Sana: ${date}*"
-enter-address: "Iltimos Yetkazib berish manzilini quyidagi, \"🗺 Mening Lokatsiyam\" tugmasi orqali jo'nating."
+enter-address: "Iltimos yetkazib berish manzilini quyidagi, \"🗺 Mening Lokatsiyam\" tugmasi orqali jo'nating."
 wrong-address: "Xato lokatsiya. Yana bir bor tekshirib ko'ring."
 my-location: 🗺 Mening Lokatsiyam
 send-number: "📱 <strong>Telefon</strong> raqamingiz qanday? Telefon raqamingizni jo'natish uchun, quyidagi \"📱 Raqamimni jo'natish\" tugmasini bosing."
@@ -175,4 +175,4 @@ enter-new-name: Ismingizni yuboring
 enter-new-last-name: Familyangizni yuboring
 delivery-cost: "_Yetkazib berish narxi_: ${cost} so'm"
 delivery_price_info: <em>Yetqazib berish xizmati 3 kmgacha 6000 so'm va 3 kmdan oshgan holda har 1 km uchun 1000 so'mdan hisoblanadi!!!</em>
-total-check: "Sizning buyurtmangiz:\n\nTelefon: ${phone}\nManzil: ${address}\nTo'lov usuli: ${order_type}\nYetkazib berish vaqti: ${delivery_time}"
+total-check: "Sizning buyurtmangiz:\n\nTelefon: ${phone}\nManzil: ${address}\nTo'lov usuli: ${order_type}"

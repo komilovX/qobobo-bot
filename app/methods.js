@@ -161,14 +161,13 @@ async function registerUser(ctx) {
 }
 
 async function getCategories() {
-  const categories = await Category.findAll(
-    {
-      where: {
-        hidden: { [Op.ne]: 1 },
-      },
+  const categories = await Category.findAll({
+    where: {
+      hidden: { [Op.ne]: 1 },
     },
-    { raw: true }
-  );
+    attributes: ["id", "parent_category", "name", "name_ru", "hidden"],
+    raw: true,
+  });
   return categories;
 }
 
@@ -320,12 +319,11 @@ async function showTotalCheque(ctx) {
   let deliveryText = ctx.i18n.t("delivery-cost", {
     cost: `${Number(delivery).format(0, 3, " ")}`,
   });
-  const { phone, address, order_type, delivery_time } = ctx.session;
+  const { phone, address, order_type } = ctx.session;
   return `${ctx.i18n.t("total-check", {
     phone,
     address,
     order_type,
-    delivery_time,
   })}\n\n${joinItems}${deliveryText}\n\n${ctx.i18n.t("total")}: ${total.format(
     0,
     3,
