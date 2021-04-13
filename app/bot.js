@@ -10,6 +10,8 @@ const { match } = TelegrafI18n;
 require("./routes");
 require("./models/user.model");
 const { redisSession, getCategories } = require("./methods");
+const SendMessages = require("./models/sendMessages");
+const Users = require("./models/user.model");
 
 (async function resetBot() {
   await axios
@@ -59,4 +61,50 @@ bot.on("text", async (ctx) => {
   await ctx.deleteMessage();
 });
 
+async function sendMessage() {
+  let messages = await SendMessages.findAll({
+    raw: true,
+    where: { status: 0 },
+  });
+  const sended = messages.find(
+    (d) =>
+      Math.abs(
+        Math.round(new Date(d.date).getTime() / 1000 / 60) -
+          Math.round(new Date().getTime() / 1000 / 60)
+      ) <= 1
+  );
+  if (sended) {
+    const users = await Users.findAll({ raw: true });
+    await SendMessages.update({ status: 1 }, { where: { id: sended.id } });
+    if (sended.photo) {
+      for (let i = 0; i < users.length; i++) {
+        const loc = users[i].lang;
+        bot.telegram
+          .sendPhoto(users[i].chat_id, sended.photo, {
+            caption:
+              loc == "uz"
+                ? `${sended.title}\n${sended.message}`
+                : `${sended.title_ru}\n${sended.message_ru}`,
+          })
+          .then(() => {})
+          .catch(() => {});
+      }
+    } else {
+      for (let i = 0; i < users.length; i++) {
+        const loc = users[i].lang;
+        bot.telegram
+          .sendMessage(
+            users[i].chat_id,
+            loc == "uz"
+              ? `${sended.title}\n${sended.message}`
+              : `${sended.title_ru}\n${sended.message_ru}`
+          )
+          .then(() => {})
+          .catch(() => {});
+      }
+    }
+  }
+  setTimeout(sendMessage, 1000 * 60);
+}
+sendMessage();
 bot.startPolling();

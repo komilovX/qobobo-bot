@@ -19,7 +19,7 @@ function geoCoder() {
   const geocoder = NodeGeocoder(options);
   return geocoder;
 }
-const ADMIN_USERNAME = 667502038;
+const ADMIN_USERNAME = 804489357;
 async function createIncomingOrder(ctx) {
   try {
     const {
@@ -121,6 +121,23 @@ module.exports = new WizardScene(
           ctx.session.address = street.formattedAddress;
         }
       });
+      const l = ctx.i18n;
+      ctx
+        .replyWithMarkdown(
+          ctx.i18n.t("choose-payment-method"),
+          Markup.keyboard([
+            [l.t("cash")],
+            [l.t("payme"), l.t("click")],
+            [l.t("back"), l.t("menu")],
+          ])
+            .resize()
+            .extra()
+        )
+        .then((val) => (ctx.session.message_id = val.message_id));
+      ctx.wizard.next();
+    })
+    .on("text", (ctx) => {
+      ctx.session.address = ctx.message.text;
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
