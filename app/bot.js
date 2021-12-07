@@ -6,11 +6,12 @@ const Stage = require("telegraf/stage");
 const scenes = require("./scenes");
 const path = require("path");
 const { match } = TelegrafI18n;
-const Orders = require("./models/orders.model");
-const Op = require("sequelize").Op;
+
 require("./routes");
 require("./models/user.model");
 const { redisSession, getCategories } = require("./methods");
+const SendMessages = require("./models/sendMessages");
+const Users = require("./models/user.model");
 
 (async function resetBot() {
   await axios
@@ -50,25 +51,60 @@ bot.use(async (ctx, next) => {
   next();
 });
 bot.start(global.routes.start);
-bot.action(match("product"), global.routes.product);
-bot.action(match("my-orders"), async (ctx) => {
-  const before = new Date().getTime() - 30 * 24 * 60 * 60 * 1000;
-  const orders = await Orders.findAll({
-    raw: true,
-    where: { chat_id: ctx.chat.id, date: { [Op.gte]: before } },
-  });
-  if (orders.length > 0) {
-    ctx.session.my_orders = orders;
-    ctx.scene.enter("my-orders");
-  } else {
-    await ctx.answerCbQuery(ctx.i18n.t("no-order"), true);
-  }
-});
-bot.action(match("cabinet"), global.routes.profil);
-bot.action(match("about-us"), global.routes.aboutUs);
+bot.hears(match("product"), global.routes.product);
+bot.hears(match("my-orders"), global.routes.myOrders);
+bot.hears(match("cabinet"), global.routes.profil);
+bot.hears(match("about-us"), global.routes.aboutUs);
+bot.hears(match("cart"), global.routes.cart);
 
 bot.on("text", async (ctx) => {
   await ctx.deleteMessage();
 });
 
+async function sendMessage() {
+  let messages = await SendMessages.findAll({
+    raw: true,
+    where: { status: 0 },
+  });
+  const sended = messages.find(
+    (d) =>
+      Math.abs(
+        Math.round(new Date(d.date).getTime() / 1000 / 60) -
+          Math.round(new Date().getTime() / 1000 / 60)
+      ) <= 1
+  );
+  if (sended) {
+    const users = await Users.findAll({ raw: true });
+    await SendMessages.update({ status: 1 }, { where: { id: sended.id } });
+    if (sended.photo) {
+      for (let i = 0; i < users.length; i++) {
+        const loc = users[i].lang;
+        bot.telegram
+          .sendPhoto(users[i].chat_id, sended.photo, {
+            caption:
+              loc == "uz"
+                ? `${sended.title}\n${sended.message}`
+                : `${sended.title_ru}\n${sended.message_ru}`,
+          })
+          .then(() => {})
+          .catch(() => {});
+      }
+    } else {
+      for (let i = 0; i < users.length; i++) {
+        const loc = users[i].lang;
+        bot.telegram
+          .sendMessage(
+            users[i].chat_id,
+            loc == "uz"
+              ? `${sended.title}\n${sended.message}`
+              : `${sended.title_ru}\n${sended.message_ru}`
+          )
+          .then(() => {})
+          .catch(() => {});
+      }
+    }
+  }
+  setTimeout(sendMessage, 1000 * 60);
+}
+sendMessage();
 bot.startPolling();

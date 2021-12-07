@@ -1,4 +1,4 @@
-enter-correct-name : "Iltimos ism sharifingizni tog'ri kiriting:  ism sharif"
+enter-correct-name: "Iltimos ism sharifingizni tog'ri kiriting:  ism sharif"
 enter-name: "Ismi-sharifingizni kiriting:"
 register-end: "Ro'yxatga olish muvaffaqiyatli yakunlandi"
 greeting: Juda yaxshi! Birgalikda buyurtma beramizmi? 😃
@@ -6,14 +6,20 @@ product: 🛍 Mahsulotlar
 stocks: 🎉 Aksiya
 about-us: 👥 Biz haqimizda
 order-series: 💖 Komplekt buyurtma
-cabinet:  ⚙️ Profil
+cabinet: ⚙️ Profil
 my-orders: "📝Mening buyurtmalarim"
 brands: "🔷 Brendlar"
 popular-products: "🔥 Mashxur tovarlar"
 no-order: "Sizda hozircha hech qanday buyurtma yo'q"
+status: "Status: ${status}"
+new: "*Yangi*"
+active: "*Aktiv*"
+process: "*Kutish rejimida*"
+canceled: "*Bekor qilingan*"
+delivered: "*Yetkazib berilgan*"
 product-caption: "🔷 Mahsulot: ${product}\n\n ${comment}\n\nNarxi: ${cost} so'm"
 choose-category: Kategoriyani tanlang
-choose-type-product : "Mahsulot turini tanlang"
+choose-type-product: "Mahsulot turini tanlang"
 choose-product: Mahsulotni tanlang
 choose-brand: Brendni tanlang
 add-to-cart: "🛒 Savatga qo'shish"
@@ -50,6 +56,7 @@ added-to-cart: Savatga qo'shildi\nYana biror narsa xohlaysizmi?
 sum: so'm
 cart-help: "*«❌ Mahsulot nomi»* - savatdan o'chirish \n\n*«🔄 Tozalash»* - savatni butunlay bo'shatish"
 back: ⬅️ Orqaga
+next: Oldinga ➡️
 clear: 🔄 Tozalash
 checkout: 🚖 Buyurtma berish
 cart: "🛒 Savat"
@@ -57,13 +64,14 @@ total: Umumiy
 total_with_delivery: Umumiy (yetkazib berish narxi bilan)
 checkout-help: "Buyurtmani *o'zingiz* olib keting yoki *Yetkazib berishni* tanlang"
 delivery: 🚖 Yetkazib berish
+delivery-time: Yetkazib berish vaqtini tanlang
 pickup: 🏃 Olib ketish
 menu: ⬅️ Menyu
 date: "*Sana: ${date}*"
-enter-address: "Iltimos Yetkazib berish manzilini quyidagi, \"🗺 Mening Lokatsiyam\" tugmasi orqali jo'nating."
+enter-address: 'Iltimos yetkazib berish manzilini quyidagi, "🗺 Mening Lokatsiyam" tugmasi orqali jo''nating.'
 wrong-address: "Xato lokatsiya. Yana bir bor tekshirib ko'ring."
 my-location: 🗺 Mening Lokatsiyam
-send-number: "📱 <strong>Telefon</strong> raqamingiz qanday? Telefon raqamingizni jo'natish uchun, quyidagi \"📱 Raqamimni jo'natish\" tugmasini bosing."
+send-number: '📱 <strong>Telefon</strong> raqamingiz qanday? Telefon raqamingizni jo''natish uchun, quyidagi "📱 Raqamimni jo''natish" tugmasini bosing.'
 settings-send-number: "📱 Raqamni +998 ** *** ** ** shaklida yuboring.\nHozirgi raqamingiz ${phone}"
 send-birthdate: "🎂 ${name}, tavallud kuningiz bilan qachon tabriklashimiz mumkin? Sanani ss.oo.yyyy ko’rinishida kiriting."
 my-number: "📱 Raqamimni jo'natish"
@@ -78,7 +86,7 @@ your-order: "<strong>Sizning buyurtmangiz:</strong>"
 phone: Telefon
 address: Manzil
 payment-method: To'lov usuli
-delivery-time-comment: Yetkazib berish vaqti/Kommentariyalar
+delivery-time-comment: Yetkazib berish vaqti
 delivery-price: <em>Yetkazib berish narxi</em>
 distance_to_branch: Shaxobchagacha bo'lgan masofa
 km: km
@@ -168,3 +176,5 @@ enter-new-last-name: Familyangizni yuboring
 delivery-cost: "_Yetkazib berish narxi_: ${cost} so'm"
 delivery_price_info: <em>Yetqazib berish xizmati 3 kmgacha 6000 so'm va 3 kmdan oshgan holda har 1 km uchun 1000 so'mdan hisoblanadi!!!</em>
 total-check: "Sizning buyurtmangiz:\n\nTelefon: ${phone}\nManzil: ${address}\nTo'lov usuli: ${order_type}"
+pay-for-order: "Sizning buyurtmangiz qabul qilindi, iltimos to'lovni amalga oshiring."
+pay-with-payme: "*Payme orqali to'lov*\nTo'lov qiymati: ${price} so'm.\nTo'lovni amalga oshirish uchun <✅ To'lash> tugmasini bosing"

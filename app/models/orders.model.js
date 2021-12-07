@@ -24,6 +24,9 @@ const Orders = sequelize.define("orders", {
   delivery: {
     type: Sequelize.FLOAT,
   },
+  delivery_time: {
+    type: Sequelize.STRING,
+  },
   total: {
     type: Sequelize.FLOAT,
     defaultValue: 0,
@@ -35,5 +38,7 @@ const Orders = sequelize.define("orders", {
     type: Sequelize.STRING,
     defaultValue: "new",
   },
+  latitude: Sequelize.FLOAT,
+  longitude: Sequelize.FLOAT,
 });
 module.exports = Orders;

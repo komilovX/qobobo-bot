@@ -10,11 +10,13 @@ const Users = require("./models/user.model");
 const Category = require("./models/category.model");
 const Products = require("./models/product.model");
 const Remainder = require("./models/remainder.model");
+const Delivery = require("./models/delivery.model");
+const DeliveryTime = require("./models/delivery_time.model");
 
 const redisSession = new Session({
   host: env.DB_HOST,
   user: env.DB_USER,
-  password: "",
+  password: env.DB_PASSWORD,
   database: env.DB_NAME,
 });
 
@@ -40,6 +42,19 @@ function calculateDelivery(distance) {
   }
 }
 
+async function calculateDeliveryByLimit(total) {
+  try {
+    let price = 0;
+    const delivery = await Delivery.findByPk(1);
+    if (delivery.limit > total) {
+      price = delivery.price;
+    }
+    return price;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function checkLimit(id, num, ctx) {
   const product = await Remainder.findOne({
     where: { product_id: id },
@@ -61,6 +76,24 @@ async function checkLimit(id, num, ctx) {
   }
 }
 
+function BasicCommandHandler(handler) {
+  if (!handler) {
+    handler = new Composer();
+  }
+
+  handler
+    .hears(match("product"), (ctx) => {
+      global.routes.product(ctx);
+    })
+    .hears(match("cabinet"), (ctx) => {
+      global.routes.profil(ctx);
+    })
+    .hears(match("my-orders"), (ctx) => {
+      global.routes.myOrders(ctx);
+    });
+  return handler;
+}
+
 function BasicStepHandler(handler) {
   if (!handler) {
     handler = new Composer();
@@ -74,6 +107,18 @@ function BasicStepHandler(handler) {
       } catch (e) {
         console.log(e);
       }
+    })
+    .hears(match("product"), (ctx) => {
+      global.routes.product(ctx);
+    })
+    .hears(match("cabinet"), (ctx) => {
+      global.routes.profil(ctx);
+    })
+    .hears(match("cart"), (ctx) => {
+      global.routes.cart(ctx);
+    })
+    .hears(match("my-orders"), (ctx) => {
+      global.routes.myOrders(ctx);
     })
     .action(match("checkout"), async (ctx) => {
       if (ctx.session.cart.length === 0) {
@@ -116,14 +161,13 @@ async function registerUser(ctx) {
 }
 
 async function getCategories() {
-  const categories = await Category.findAll(
-    {
-      where: {
-        hidden: { [Op.ne]: 1 },
-      },
+  const categories = await Category.findAll({
+    where: {
+      hidden: { [Op.ne]: 1 },
     },
-    { raw: true }
-  );
+    attributes: ["id", "parent_category", "name", "name_ru", "hidden"],
+    raw: true,
+  });
   return categories;
 }
 
@@ -160,6 +204,7 @@ async function getCategoriesByBrandId(id) {
   );
   return category;
 }
+
 async function getProductsByBrandAndCategory(brand_id, category_id) {
   let products = await Products.findAll({
     where: { brand_id, category_id },
@@ -200,11 +245,11 @@ function ArrayConcat(arr, ctx, type) {
     const category = arr.map((x) =>
       btn(lang === "uz" ? x.name : x.name_ru, x.id)
     );
-    return [...head, ...category, btn(loc.t("back"), loc.t("back"))];
+    return [...head, ...category];
   } else if (type == "brand") {
     const arrows = [btn("⬅️", "⬅️"), btn("➡️", "➡️")];
     let catalog = _.chunk(category, 2);
-    return [head, ...catalog, arrows, [btn(loc.t("back"), loc.t("back"))]];
+    return [head, ...catalog, arrows];
   }
   return [...category, btn(loc.t("back"), loc.t("back"))];
 }
@@ -214,11 +259,6 @@ function inlineKeyboard(ctx, nth, length, counter) {
   const loc = ctx.i18n;
   let cart = ctx.session.in_cart;
   return [
-    [
-      btn("⬅️", "⬅️"),
-      btn(`${nth + 1}-${length}`, `${nth}-${length}`),
-      btn("➡️", "➡️"),
-    ],
     [btn("-", "-"), btn(`${counter}`, `${counter}`), btn("+", "+")],
     [btn(loc.t("add-to-cart"), loc.t("add-to-cart"))],
     [
@@ -226,6 +266,14 @@ function inlineKeyboard(ctx, nth, length, counter) {
       btn(`${loc.t("cart")} (${cart || 0})`, `${loc.t("cart")} (${cart || 0})`),
     ],
   ];
+}
+async function getDeliveryTimes() {
+  try {
+    const times = await DeliveryTime.findAll({ raw: true });
+    return times.map((time) => time.time);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function showCheque(cart, ctx) {
@@ -250,7 +298,7 @@ function showCheque(cart, ctx) {
   )}*: ${total.format(0, 3, " ")} ${loc == "uz" ? "so'm" : "сум"}`;
 }
 
-function showTotalCheque(ctx) {
+async function showTotalCheque(ctx) {
   const loc = ctx.i18n.locale();
   const sums = [];
   const items = ctx.session.cart.map((p) => {
@@ -262,9 +310,11 @@ function showTotalCheque(ctx) {
       " "
     )} = ${total.format(0, 3, " ")} ${loc == "uz" ? "so'm" : "сум"}\n\n`;
   });
-  let delivery = calculateDelivery(ctx.session.distance);
+  let productSum = sums.reduce((acc, cur) => acc + cur);
+  let delivery = await calculateDeliveryByLimit(productSum);
   ctx.session.delivery = delivery;
-  const total = sums.reduce((acc, cur) => acc + cur) + delivery;
+  const total = productSum + delivery;
+  ctx.session.total = total;
 
   const joinItems = items.join("");
   let deliveryText = ctx.i18n.t("delivery-cost", {
@@ -274,7 +324,7 @@ function showTotalCheque(ctx) {
   return `${ctx.i18n.t("total-check", {
     phone,
     address,
-    order_type,
+    order_type: ctx.i18n.t(order_type),
   })}\n\n${joinItems}${deliveryText}\n\n${ctx.i18n.t("total")}: ${total.format(
     0,
     3,
@@ -282,8 +332,14 @@ function showTotalCheque(ctx) {
   )} ${loc == "uz" ? "so'm" : "сум"}`;
 }
 
+function imageWrapper(image) {
+  return env.no_image;
+  return `${env.url}/uploads/${image}`;
+}
+
 module.exports = {
   BasicStepHandler,
+  BasicCommandHandler,
   redisSession,
   registerUser,
   getCategories,
@@ -291,10 +347,12 @@ module.exports = {
   getBrands,
   getProductsByBrandAndCategory,
   getCategoriesByBrandId,
+  getDeliveryTimes,
   checkLimit,
   productCaption,
   ArrayConcat,
   showCheque,
   inlineKeyboard,
   showTotalCheque,
+  imageWrapper,
 };
