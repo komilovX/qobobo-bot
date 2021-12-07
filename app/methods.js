@@ -314,6 +314,7 @@ async function showTotalCheque(ctx) {
   let delivery = await calculateDeliveryByLimit(productSum);
   ctx.session.delivery = delivery;
   const total = productSum + delivery;
+  ctx.session.total = total;
 
   const joinItems = items.join("");
   let deliveryText = ctx.i18n.t("delivery-cost", {
@@ -323,7 +324,7 @@ async function showTotalCheque(ctx) {
   return `${ctx.i18n.t("total-check", {
     phone,
     address,
-    order_type,
+    order_type: ctx.i18n.t(order_type),
   })}\n\n${joinItems}${deliveryText}\n\n${ctx.i18n.t("total")}: ${total.format(
     0,
     3,

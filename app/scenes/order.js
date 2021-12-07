@@ -24,6 +24,7 @@ async function createIncomingOrder(ctx) {
   try {
     const {
       first_name,
+      last_name,
       phone,
       address,
       order_type,
@@ -33,7 +34,7 @@ async function createIncomingOrder(ctx) {
     } = ctx.session;
     const order = await Orders.create({
       chat_id: ctx.chat.id,
-      clientName: first_name,
+      clientName: `${first_name} ${last_name}`,
       clientPhone: phone,
       address,
       products: JSON.stringify(ctx.session.cart),
@@ -127,7 +128,7 @@ module.exports = new WizardScene(
           ctx.i18n.t("choose-payment-method"),
           Markup.keyboard([
             [l.t("cash")],
-            [l.t("payme"), l.t("click")],
+            [l.t("payme")],
             [l.t("back"), l.t("menu")],
           ])
             .resize()
@@ -144,7 +145,7 @@ module.exports = new WizardScene(
           ctx.i18n.t("choose-payment-method"),
           Markup.keyboard([
             [l.t("cash")],
-            [l.t("payme"), l.t("click")],
+            [l.t("payme")],
             [l.t("back"), l.t("menu")],
           ])
             .resize()
@@ -173,7 +174,7 @@ module.exports = new WizardScene(
       global.routes.start(ctx);
     })
     .hears(match("cash"), async (ctx) => {
-      ctx.session.order_type = ctx.i18n.t("cash");
+      ctx.session.order_type = "cash";
       const check = await showTotalCheque(ctx);
       const l = ctx.i18n;
       ctx
@@ -187,9 +188,8 @@ module.exports = new WizardScene(
       ctx.wizard.next();
     })
     .hears(match("click"), async (ctx) => {
-      ctx.session.order_type = ctx.i18n.t("click");
+      ctx.session.order_type = "click";
       const check = await showTotalCheque(ctx);
-      console.log("check :>> ", check);
       const l = ctx.i18n;
       ctx
         .replyWithMarkdown(
@@ -202,7 +202,7 @@ module.exports = new WizardScene(
       ctx.wizard.next();
     })
     .hears(match("payme"), async (ctx) => {
-      ctx.session.order_type = ctx.i18n.t("payme");
+      ctx.session.order_type = "payme";
       const check = await showTotalCheque(ctx);
       const l = ctx.i18n;
       ctx
@@ -223,7 +223,7 @@ module.exports = new WizardScene(
           ctx.i18n.t("choose-payment-method"),
           Markup.keyboard([
             [l.t("cash")],
-            [l.t("payme"), l.t("click")],
+            [l.t("payme")],
             [l.t("back"), l.t("menu")],
           ])
             .resize()
@@ -239,7 +239,7 @@ module.exports = new WizardScene(
           ctx.i18n.t("choose-payment-method"),
           Markup.keyboard([
             [l.t("cash")],
-            [l.t("payme"), l.t("click")],
+            [l.t("payme")],
             [l.t("back"), l.t("menu")],
           ])
             .resize()
@@ -252,16 +252,47 @@ module.exports = new WizardScene(
       try {
         let order = await createIncomingOrder(ctx);
         await ctx.deleteMessage(ctx.session.message_id);
-        await ctx.replyWithMarkdown(
-          ctx.i18n.t("will-call-you", { id: order.dataValues.id })
-        );
+        if (ctx.session.order_type === "payme") {
+          const paymentUrl = Buffer.from(
+            `m=${env.payme_id};ac.order_id=${order.id};a=${
+              ctx.session.total * 100
+            }`
+          ).toString("base64");
+
+          ctx.reply(
+            ctx.i18n.t("pay-for-order"),
+            Markup.keyboard([
+              [Markup.callbackButton(ctx.i18n.t("product"))],
+              [Markup.callbackButton(ctx.i18n.t("my-orders"))],
+              [Markup.callbackButton(ctx.i18n.t("cart"))],
+              [Markup.callbackButton(ctx.i18n.t("cabinet"))],
+            ])
+              .resize()
+              .extra()
+          );
+          await ctx.replyWithMarkdown(
+            ctx.i18n.t("pay-with-payme", { price: ctx.session.total }),
+            Markup.inlineKeyboard([
+              Markup.urlButton(
+                ctx.i18n.t("pay"),
+                `https://checkout.paycom.uz/${paymentUrl}`
+              ),
+            ])
+              .resize()
+              .extra()
+          );
+        } else {
+          await ctx.replyWithMarkdown(
+            ctx.i18n.t("will-call-you", { id: order.dataValues.id })
+          );
+          await ctx.scene.leave();
+          global.routes.start(ctx, true);
+        }
         ctx.session.cart = [];
         ctx.session.in_cart = 0;
         (ctx.session.delivery = null),
           (ctx.session.address = null),
           (ctx.session.distance = null);
-        await ctx.scene.leave();
-        return global.routes.start(ctx, true);
       } catch (e) {
         console.log(e);
       }
