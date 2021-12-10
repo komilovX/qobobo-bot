@@ -254,7 +254,7 @@ module.exports = new WizardScene(
         await ctx.deleteMessage(ctx.session.message_id);
         if (ctx.session.order_type === "payme") {
           const paymentUrl = Buffer.from(
-            `m=${env.payme_id};ac.order_id=${order.id};a=${
+            `m=${env.payme_id};ac.FruteaCorp=${order.id};a=${
               ctx.session.total * 100
             }`
           ).toString("base64");
