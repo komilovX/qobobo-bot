@@ -333,7 +333,7 @@ async function showTotalCheque(ctx) {
 }
 
 function imageWrapper(image) {
-  return env.no_image;
+  // return env.no_image;
   return `${env.url}/uploads/${image}`;
 }
 

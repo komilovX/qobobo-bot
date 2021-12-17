@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { TOKEN } = require("dotenv").config().parsed;
+const { TOKEN, url } = require("dotenv").config().parsed;
 const Telegraf = require("telegraf");
 const TelegrafI18n = require("telegraf-i18n");
 const Stage = require("telegraf/stage");
@@ -80,7 +80,7 @@ async function sendMessage() {
       for (let i = 0; i < users.length; i++) {
         const loc = users[i].lang;
         bot.telegram
-          .sendPhoto(users[i].chat_id, sended.photo, {
+          .sendPhoto(users[i].chat_id, `${url}/uploads/${sended.photo}`, {
             caption:
               loc == "uz"
                 ? `${sended.title}\n${sended.message}`
